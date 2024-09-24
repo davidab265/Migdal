@@ -1,0 +1,125 @@
+/* Import a Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
+/* Body Styling with Gradient Background */
+body {
+    background: linear-gradient(135deg, #713563, #14034d);
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container for Content */
+#prompt-form, #results {
+    width: 100%;
+    max-width: 800px;
+    background: #ffffffb3; /* Slight transparency */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Heading */
+h1 {
+    margin-bottom: 20px;
+    font-size: 3.2em;
+    color: #fbdffa;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Label */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Textarea Styling */
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+    resize: vertical;
+    min-height: 120px;
+}
+
+textarea:focus {
+    border-color: #66a6ff;
+    outline: none;
+}
+
+/* Button Styling */
+button {
+    display: inline-block;
+    background-color: #3071cb;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #605f87;
+    transform: translateY(-2px);
+}
+
+/* Results Styling */
+#results {
+    display: none;
+    margin-top: 20px;
+}
+
+pre {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    button {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    pre {
+        font-size: 0.9em;
+    }
+}

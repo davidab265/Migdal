@@ -1,0 +1,76 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 3. Get the latest tag and increment patch version
+      - name: Get latest tag and increment patch version
+        id: tag
+        run: |
+          git fetch --tags
+          latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "Latest tag: $latestTag"
+          # Assuming the versioning is in the format vX.X.X
+          if [ -z "$latestTag" ]; then
+            newTag="v1.0.0"
+          else
+            IFS='.' read -r -a versionParts <<< "${latestTag//v/}"
+            newTag="v${versionParts[0]}.${versionParts[1]}.$((versionParts[2]+1))"
+          fi
+          echo "New tag: $newTag"
+          echo "new_tag=$newTag" >> $GITHUB_ENV
+
+      # 4. Build Docker image and tag it with the new version
+      - name: Build and push Docker image
+        run: |
+          echo "${DOCKER_TOKEN}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+          docker build -t davidabrams2/human-ai:${{ env.new_tag }} .
+          docker push your-docker-repo/app:${{ env.new_tag }}
+
+      # 5. Update values.yaml with new image tag
+      - name: Update values.yaml with new image tag
+        run: |
+          sed -i "s/tag:.*/tag: ${{ env.new_tag }}/" k8s/argo/values.yaml
+
+      # 6. Commit the changes and tag the new version
+      - name: Commit changes and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add k8s/argo/values.yaml
+          git commit -m "Update image tag to ${{ env.new_tag }}"
+          git tag ${{ env.new_tag }}
+          git push origin main --tags
+
+      # 7. Trigger Argo CD to redeploy the new version
+      - name: Trigger Argo CD Redeployment
+        run: |
+          kubectl apply -f k8s/argo/application.yaml
+
+      # Optional: Notify about the deployment
+      - name: Notify deployment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const newTag = process.env.new_tag;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Deployed new version ${newTag} 🚀`
+            });
