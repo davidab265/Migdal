@@ -1,0 +1,52 @@
+configs:
+  credentialTemplates:
+    ssh-creds:
+      url: "git@github.com:davidab265"
+  secret:  
+    argocdServerAdminPassword: $2a$10$D1poV4uPGjDU3YEuj8fdyeMnQWxjW7jqRwHbqva07khW6p76dxjfi
+
+server:
+  additionalApplications:
+    - name: app
+      namespace: argocd
+      additionalLabels: {}
+      additionalAnnotations: {}
+      source:
+        repoURL: 'git@github.com:davidab265'
+        targetRevision: HEAD
+        path: k8s
+        directory: /
+        #  recurse: true
+
+      destination:
+        namespace: default
+        server: https://kubernetes.default.svc
+
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+
+
+  ingress:
+    enabled: true
+    https: true
+    host:
+      - 4321.hopto.org
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    hosts: 
+      - 4321.hopto.org
+    paths:
+      - /
+  extraArgs:
+    - --insecure
+    - --rootpath
+    - /argocd
+
+
