@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: migdal-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/davidab265/Migdal
+    targetRevision: HEAD 
+    path: k8s                                # The folder where the Helm chart is located
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: david-abrams 
+  syncPolicy:
+    automated:
+      prune: true   # Optional: enables automatic pruning of resources
+      selfHeal: true # Optional: auto-sync resources when they diverge from the Git repo
+    syncOptions:
+      - CreateNamespace=true 
