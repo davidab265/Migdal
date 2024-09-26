@@ -34,3 +34,8 @@ This repository also includes a GitHub Actions pipeline that automates the follo
 
 This pipeline ensures that every change made to the application is automatically built, tested, and deployed on Kubernetes.
 
+
+## Testing the pipeline:
+To enshure the pipeline is working, make a change in the Html file `app/public/index.html`.
+then go to this route: `a0b874b3195a246be9544d3e46049108-829264806.us-east-2.elb.amazonaws.com`
+and see if your changes were applied to the application.
