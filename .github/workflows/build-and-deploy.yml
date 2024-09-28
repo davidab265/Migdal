@@ -55,7 +55,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           # path to the Dockerfile
-          context: app/Dockerfile
+          context: ./app/Dockerfile
           tags: ${{ secrets.REGISTRY_URL }}/david/app:${{ needs.calculate_new_tag.outputs.tag }}
           push: true
 
