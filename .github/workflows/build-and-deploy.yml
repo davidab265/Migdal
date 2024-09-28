@@ -19,7 +19,7 @@ jobs:
       # - name: Set up Node.js
       #   uses: actions/setup-node@v3
       #   with:
-      #     node-version: 14
+      #     node-vdersion: 14
 
       - name: Calculate new tag
         id: set_tag
@@ -48,14 +48,14 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: harbor.getapp.sh
-          username: ${{ secrets.REGISTRY_USERNAME }}
+          username: "${{ secrets.REGISTRY_USERNAME }}"
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build image and push to Docker Hub and GitHub Container Registry
         uses: docker/build-push-action@v5
         with:
           # path to the Dockerfile
-          context: .
+          context: app/Dockerfile
           tags: ${{ secrets.REGISTRY_URL }}/david/app:${{ needs.calculate_new_tag.outputs.tag }}
           push: true
 
