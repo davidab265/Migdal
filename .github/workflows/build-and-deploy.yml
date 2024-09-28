@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0  # Ensure all tags are fetched
       
       - name: test
-        run: ls -la && pwd 
+        run: ls -la && pwd && cd app
   
       - name: Docker login
         uses: docker/login-action@v3
@@ -58,7 +58,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           # path to the Dockerfile
-          context: ./app/Dockerfile
+          context: .
           tags: ${{ secrets.REGISTRY_URL }}/david/app:${{ needs.calculate_new_tag.outputs.tag }}
           push: true
 
