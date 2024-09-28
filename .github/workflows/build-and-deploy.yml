@@ -69,7 +69,7 @@ jobs:
       # 5. Update values.yaml with new image tag
       - name: Update values.yaml with new image tag
         run: |
-          sed -i "s/image:.*/image: ${{ secrets.REGISTRY_URL }}/test/app:${{ needs.calculate_new_tag.outputs.tag }}/" k8s/deployment.yaml
+          sed -i "s|image:.*|image: ${{ secrets.REGISTRY_URL }}/test/app:${{ needs.calculate_new_tag.outputs.tag }}|" k8s/deployment.yaml
 
       # 6. Commit the changes and tag the new version
       - name: Commit changes and push
