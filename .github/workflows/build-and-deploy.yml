@@ -3,9 +3,9 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - develop
+      - main
 jobs:
-# 1: calculate new tag (for taging docker image and git commit)
+# 1: calculate new tag (for taging docker image and git commit) #
   calculate_new_tag:
     runs-on: ubuntu-latest
     outputs:
