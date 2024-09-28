@@ -59,7 +59,7 @@ jobs:
           tags: ${{ secrets.REGISTRY_URL }}/david/app:${{ needs.calculate_new_tag.outputs.tag }}
           push: true
 
-# 3: update kubernetes files and commit changes      
+# 3: update kubernetes files and commit changes  #    
   tag_the_commit:
     needs: calculate_new_tag
     runs-on: ubuntu-latest
