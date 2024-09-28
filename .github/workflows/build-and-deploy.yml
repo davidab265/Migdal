@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
+
 jobs:
 # 1: calculate new tag (for taging docker image and git commit) #
   calculate_new_tag:
@@ -64,6 +68,7 @@ jobs:
   tag_the_commit:
     needs: calculate_new_tag
     runs-on: ubuntu-latest
+    if: ${{env.SKIP_WORKFLOW}} != 'true' # Skip the workflow if this variable is set
     steps:
       - uses: actions/checkout@v2
       # 5. Update values.yaml with new image tag
@@ -74,20 +79,13 @@ jobs:
       # 6. Commit the changes and tag the new version
       - name: Commit changes and push
         run: |
+          echo "SKIP_WORKFLOW=true" >> $GITHUB_ENV
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add k8s/deployment.yaml
           git commit -m "Update image tag to ${{ needs.calculate_new_tag.outputs.tag }}"
           git tag ${{ needs.calculate_new_tag.outputs.tag }}
           git push origin main --tags
-
-      # - name: Bump version and push tag
-      #   id: tag_version
-      #   uses: mathieudutour/github-tag-action@v6.1
-      #   with:
-      #     github_token: ${{ secrets.SECRET_GITHUB_TOKEN }}
-      #     custom_tag: ${{ needs.calculate_new_tag.outputs.tag }}
-      #     tag_prefix: ""
 
 
 
