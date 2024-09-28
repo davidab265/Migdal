@@ -57,7 +57,7 @@ jobs:
         with:
           context: ./app
           file: ./app/Dockerfile
-          tags: ${{ secrets.REGISTRY_URL }}/david/app:${{ needs.calculate_new_tag.outputs.tag }}
+          tags: ${{ secrets.REGISTRY_URL }}/test/app:${{ needs.calculate_new_tag.outputs.tag }}
           push: true
 
 # 3: update kubernetes files and commit changes  #    
